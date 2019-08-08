@@ -276,3 +276,45 @@ Spring MVC 실습
             </html>
             ~~~
 4. Controller 작성실습 03
+    1. http://localhost:8080/mvcexam/goods/{id} 으로 요청을 보낸다.
+    2. 서버는 id를 콘솔에 출력하고, 사용자의 브라우저 정보를 콘솔에 출력한다.
+    3. 서버는 HttpServletRequest를 이용해서 사용자가 요청한 Path정보를 콘솔에 출력한다.
+        * 요청을 처리를 위한 컨트롤러 생성
+            ~~~
+            @Controller
+            public class GoodsController {
+                @GetMapping("/goods/{id}")
+                public String getGoodsById(@PathVariable(name="id") int id,
+                                           @RequestHeader(value="User-Agent", defaultValue="myBrowser") String userAgent,
+                                           HttpServletRequest request,
+                                           ModelMap model
+                ) {
+            
+                    String path = request.getServletPath();
+            
+                    System.out.println("id : " + id);
+                    System.out.println("user_agent : " + userAgent);
+                    System.out.println("path : " + path);
+            
+                    model.addAttribute("id", id);
+                    model.addAttribute("userAgent", userAgent);
+                    model.addAttribute("path", path);
+                    return "goodsById";
+                }
+            }
+            ~~~
+        * 결과 페이지 작성
+            ~~~
+            <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+            <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <title>Insert title here</title>
+            </head>
+            <body>
+            id : ${id} <br>
+            user_agent : ${userAgent}<br>
+            path : ${path}<br>
+            </body>
+            </html>
+            ~~~

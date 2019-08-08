@@ -193,4 +193,86 @@ Spring MVC 실습
                 }
             ~~~
 3. Controller 작성 실습02
-4. Controller 작성 실습03
+    1. http://localhost:8080/mvcexam/userform으로 요청을 보내면 이름, email, 나이를 물어보는 폼이 보여진다.
+        * userform.jsp 작성
+            ~~~
+            <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+            <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <title>Insert title here</title>
+            </head>
+            <body>
+            <form method="post" action="regist">
+                name : <input type="text" name="name"><br>
+                email : <input type="text" name="email"><br>
+                age : <input type="text" name="age"><br>
+                <input type="submit" value="확인">
+            </body>
+            </html>
+            ~~~
+        * UserController 작성
+            ~~~
+            @Controller
+            public class UserController {
+                @RequestMapping(path="/userform", method= RequestMethod.GET)
+                public String userform() {
+                    return "userform";
+                }
+            }
+            ~~~
+        * userform.jsp에서 입력한 값들을 묶어서 전달하기위해 User.class DTO 생성
+            ~~~
+            public class User {
+                private String name;
+                private String email;
+                private int age;
+                public String getName() {
+                    return name;
+                }
+                public void setName(String name) {
+                    this.name = name;
+                }
+                public String getEmail() {
+                    return email;
+                }
+                public void setEmail(String email) {
+                    this.email = email;
+                }
+                public int getAge() {
+                    return age;
+                }
+                public void setAge(int age) {
+                    this.age = age;
+                }
+                @Override
+                public String toString() {
+                    return "User [name=" + name + ", email=" + email + ", age=" + age + "]";
+                }
+            }
+            ~~~
+    2.폼에서 값을 입력하고 확인을 누르면 post방식으로 http://localhost:8080/mvcexam/regist에 정보를 전달하게 된다.
+        * UserController에 POST 요청 메서드 추가
+            ~~~
+            @RequestMapping(path="/regist", method=RequestMethod.POST)
+                public String regist(@ModelAttribute User user) {
+            
+                    System.out.println("사용자가 입력한 user 정보입니다. 해당 정보를 이용하는 코드가 와야합니다.");
+                    System.out.println(user);
+                    return "regist";
+                }
+            ~~~
+    3. regist에서는 입력받은 결과를 콘솔 화면에 출력한다.
+        * regist.jsp 작성
+            ~~~
+            <html>
+            <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <title>Insert title here</title>
+            </head>
+            <body>
+            <h2>등록되었습니다.</h2>
+            </body>
+            </html>
+            ~~~
+4. Controller 작성실습 03
